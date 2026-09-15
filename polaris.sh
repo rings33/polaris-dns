@@ -297,9 +297,9 @@ cmd_status() {
   echo "======================================================="
 
   # Timer / renovacao
-  state=$(systemctl is-active dns.timer 2>/dev/null || true)
+  state=$(systemctl is-active polaris.timer 2>/dev/null || systemctl is-active dns.timer 2>/dev/null || true)
   if [ "$state" = "active" ]; then
-    next=$(systemctl show dns.timer -p NextElapseUSecRealtime --value 2>/dev/null)
+    next=$(systemctl show polaris.timer -p NextElapseUSecRealtime --value 2>/dev/null || systemctl show dns.timer -p NextElapseUSecRealtime --value 2>/dev/null || true)
     if [ -n "$next" ] && [ "$next" != "n/a" ]; then
       rem=$(( $(date -d "$next" +%s 2>/dev/null || echo 0) - $(date +%s) ))
     else
@@ -312,7 +312,7 @@ cmd_status() {
       printf '  %-14s agendada\n' "Renovacao:"
     fi
   else
-    printf '  %-14s PARADO (use: dns start)\n' "Servico:"
+    printf '  %-14s PARADO (use: polaris start)\n' "Servico:"
     printf '  %-14s sem renovacao automatica\n' "Renovacao:"
   fi
 
@@ -381,15 +381,15 @@ cmd_off() {
 cmd_start() {
   require_root
   load_conf
-  systemctl enable --now dns.timer >/dev/null 2>&1
+  systemctl enable --now polaris.timer >/dev/null 2>&1
   cmd_cycle
   echo "DNS iniciado: ciclo executado e timer ativo (a cada 30 min)."
-  systemctl is-active dns.timer >/dev/null 2>&1 && systemctl status dns.timer --no-pager -n 0 | grep -E 'Trigger|Active'
+  systemctl is-active polaris.timer >/dev/null 2>&1 && systemctl status polaris.timer --no-pager -n 0 | grep -E 'Trigger|Active'
 }
 
 cmd_stop() {
   require_root
-  systemctl disable --now dns.timer >/dev/null 2>&1
+  systemctl disable --now polaris.timer >/dev/null 2>&1
   echo "Timer parado. O DNS atual continua em uso ate voce restaurar ('dns off')."
 }
 
