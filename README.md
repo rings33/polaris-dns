@@ -25,7 +25,7 @@ Trocar DNS manualmente é lento e propenso a erro. O Polaris DNS automatiza tudo
 *   **Seguro:** nunca toca em `/etc/resolv.conf` direto, nunca desativa firewall, exige `sudo` apenas nas ações que alteram o sistema.
 *   **Transparente:** painel `status`, log rotativo, notificações na área de trabalho quando o provedor muda.
 
-> **Versão atual: Linux terminal.** É a versão que rodo em produção. A edição Windows gráfica (tray ao lado do relógio) está documentada em `WINDOWS.md` e entra em beta separadamente.
+> **Versão atual: Linux terminal.** 
 
 ---
 
